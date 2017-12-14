@@ -2,34 +2,41 @@ version: '2'
 
 services:
 
+  sentry_nginx:
+    container_name: "sentry_nginx"
+    image: nginx:latest
+    volumes:
+      - ./config/sentry.nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - VIRTUAL_HOST=sentry.chalk.o
+    depends_on:
+      - sentry_main
+    networks:
+      hub:
+        aliases:
+          - sentry.chalk.o
+
   sentry_main:
     container_name: "sentry_main"
-    image: haoliang/sentry:latest
+    image: sentry:latest
     volumes:
       - ./var/sentry:/var/lib/sentry/files
       - ./another_entrypoint.sh:/another_entrypoint.sh
     expose:
-      - "80"
+      - "9000"
     environment:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
       - SENTRY_DB_PASSWORD=seiue123
       - SENTRY_REDIS_HOST=sentry_redis
-      - SENTRY_WEB_PORT=80
-      - VIRTUAL_HOST=sentry.chalk.o
-      - VIRTUAL_PORT=80
-    entrypoint: /another_entrypoint.sh
-    user: 0:0
     command: run web
     depends_on:
       - sentry_postgres
       - sentry_redis
       - sentry_memcached
     networks:
-      hub:
-        aliases:
-          - sentry.chalk.o
+      - hub
 
   sentry_postgres:
     container_name: "sentry_postgres"
@@ -58,7 +65,7 @@ services:
 
   sentry_cron:
     container_name: "sentry_cron"
-    image: haoliang/sentry:latest
+    image: sentry:latest
     volumes:
       - ./var/sentry:/var/lib/sentry/files
     environment:
@@ -67,7 +74,8 @@ services:
       - SENTRY_DB_USER=sentry
       - SENTRY_DB_PASSWORD=seiue123
       - SENTRY_REDIS_HOST=sentry_redis
-    command: run cron
+    entrypoint: ["/entrypoint.sh"]
+    command: ["run", "cron"]
     depends_on:
       - sentry_postgres
       - sentry_redis
@@ -77,7 +85,7 @@ services:
 
   sentry_worker:
     container_name: "sentry_worker"
-    image: haoliang/sentry:latest
+    image: sentry:latest
     volumes:
       - ./var/sentry:/var/lib/sentry/files
     environment:
@@ -86,7 +94,8 @@ services:
       - SENTRY_DB_USER=sentry
       - SENTRY_DB_PASSWORD=seiue123
       - SENTRY_REDIS_HOST=sentry_redis
-    command: run worker
+    entrypoint: ["/entrypoint.sh"]
+    command: ["run", "worker"]
     depends_on:
       - sentry_postgres
       - sentry_redis

@@ -1,16 +1,13 @@
 #!/usr/bin/env sh
 
-auth_token=$1
-dsn=$2
-
-if [ -z "$auth_token" -o -z "$dsn" ]; then
-    echo "usage: this-script auth_token dsn"
+if [ -z "$sentry_auth_token" -o -z "$sentry_dsn" ]; then
+    echo "did you export sentry_auth_token and sentry_dsn before run this script ?"
     exit 1
 fi
 
 docker run --rm -it \
-    -e SENTRY_AUTH_TOKEN=$auth_token \
-    -e SENTRY_DSN=$dsn \
+    -e SENTRY_AUTH_TOKEN=$sentry_auth_token \
+    -e SENTRY_DSN=$sentry_dsn \
     -v $(pwd)/var/sentry_cli:/work \
     --net=hub \
     getsentry/sentry-cli \
