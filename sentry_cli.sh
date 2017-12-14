@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 auth_token=$1
-dsn=$@
+dsn=$2
 
 if [ -z "$auth_token" -o -z "$dsn" ]; then
     echo "usage: this-script auth_token dsn"
