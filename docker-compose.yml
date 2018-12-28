@@ -2,41 +2,25 @@ version: '2'
 
 services:
 
-  sentry_nginx:
-    container_name: "sentry_nginx"
-    image: nginx:latest
-    volumes:
-      - ./config/sentry.nginx.conf:/etc/nginx/nginx.conf
-    environment:
-      - VIRTUAL_HOST=sentry.chalk.o
-    depends_on:
-      - sentry_main
-    networks:
-      hub:
-        aliases:
-          - sentry.chalk.o
-
   sentry_main:
     container_name: "sentry_main"
     image: sentry:latest
     volumes:
       - ./var/sentry:/var/lib/sentry/files
       - ./another_entrypoint.sh:/another_entrypoint.sh
-    expose:
-      - "9000"
+    ports:
+      - "127.0.0.1:9000:9000"
     environment:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
-      - SENTRY_DB_PASSWORD=seiue123
+      - SENTRY_DB_PASSWORD=smile123
       - SENTRY_REDIS_HOST=sentry_redis
     command: run web
     depends_on:
       - sentry_postgres
       - sentry_redis
       - sentry_memcached
-    networks:
-      - hub
 
   sentry_postgres:
     container_name: "sentry_postgres"
@@ -45,23 +29,17 @@ services:
       - ./var/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=sentry
-      - POSTGRES_PASSWORD=seiue123
-    networks:
-      - hub
+      - POSTGRES_PASSWORD=smile123
 
   sentry_redis:
     container_name: "sentry_redis"
     image: redis:latest
     volumes:
       - ./var/redis:/data
-    networks:
-      - hub
 
   sentry_memcached:
     container_name: "sentry_memcached"
     image: memcached:latest
-    networks:
-      - hub
 
   sentry_cron:
     container_name: "sentry_cron"
@@ -72,7 +50,7 @@ services:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
-      - SENTRY_DB_PASSWORD=seiue123
+      - SENTRY_DB_PASSWORD=smile123
       - SENTRY_REDIS_HOST=sentry_redis
     entrypoint: ["/entrypoint.sh"]
     command: ["run", "cron"]
@@ -80,8 +58,6 @@ services:
       - sentry_postgres
       - sentry_redis
       - sentry_memcached
-    networks:
-      - hub
 
   sentry_worker:
     container_name: "sentry_worker"
@@ -92,7 +68,7 @@ services:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
-      - SENTRY_DB_PASSWORD=seiue123
+      - SENTRY_DB_PASSWORD=smile123
       - SENTRY_REDIS_HOST=sentry_redis
     entrypoint: ["/entrypoint.sh"]
     command: ["run", "worker"]
@@ -100,9 +76,3 @@ services:
       - sentry_postgres
       - sentry_redis
       - sentry_memcached
-    networks:
-      - hub
-
-networks:
-    hub:
-        external: true

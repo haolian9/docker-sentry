@@ -9,7 +9,7 @@ docker run --rm -it \
     -e SENTRY_AUTH_TOKEN=$sentry_auth_token \
     -e SENTRY_DSN=$sentry_dsn \
     -v $(pwd)/var/sentry_cli:/work \
-    --net=hub \
+    --net=sentry \
     getsentry/sentry-cli \
     sentry-cli "$@"
 
