@@ -21,7 +21,7 @@ $my_dir/docker-compose.sh stop
 $my_dir/docker-compose.sh up -d sentry_redis sentry_postgres
 
 docker run -it --rm \
-    --network 'sentry' \
+    --network 'sentry_default' \
     -e SENTRY_SECRET_KEY="$secret_key" \
     -e SENTRY_POSTGRES_HOST=sentry_postgres \
     -e SENTRY_DB_USER=sentry \

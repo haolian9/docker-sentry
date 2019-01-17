@@ -2,4 +2,4 @@
 
 specs:
 
-* network == sentry # see ./docker-compose.sh
+* network == sentry_default # see ./docker-compose.sh
