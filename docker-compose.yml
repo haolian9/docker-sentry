@@ -14,7 +14,7 @@ services:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
-      - SENTRY_DB_PASSWORD=smile123
+      - SENTRY_DB_PASSWORD=sentry123
       - SENTRY_REDIS_HOST=sentry_redis
     command: run web
     depends_on:
@@ -29,7 +29,7 @@ services:
       - ./var/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=sentry
-      - POSTGRES_PASSWORD=smile123
+      - POSTGRES_PASSWORD=sentry123
 
   sentry_redis:
     container_name: "sentry_redis"
@@ -50,7 +50,7 @@ services:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
-      - SENTRY_DB_PASSWORD=smile123
+      - SENTRY_DB_PASSWORD=sentry123
       - SENTRY_REDIS_HOST=sentry_redis
     entrypoint: ["/entrypoint.sh"]
     command: ["run", "cron"]
@@ -68,7 +68,7 @@ services:
       - SENTRY_SECRET_KEY=$secret_key
       - SENTRY_POSTGRES_HOST=sentry_postgres
       - SENTRY_DB_USER=sentry
-      - SENTRY_DB_PASSWORD=smile123
+      - SENTRY_DB_PASSWORD=sentry123
       - SENTRY_REDIS_HOST=sentry_redis
     entrypoint: ["/entrypoint.sh"]
     command: ["run", "worker"]

@@ -25,7 +25,7 @@ docker run -it --rm \
     -e SENTRY_SECRET_KEY="$secret_key" \
     -e SENTRY_POSTGRES_HOST=sentry_postgres \
     -e SENTRY_DB_USER=sentry \
-    -e SENTRY_DB_PASSWORD=smile123 \
+    -e SENTRY_DB_PASSWORD=sentry123 \
     -e SENTRY_REDIS_HOST=sentry_redis \
     -v $(pwd)/var/sentry:/var/lib/sentry/files \
     sentry upgrade
